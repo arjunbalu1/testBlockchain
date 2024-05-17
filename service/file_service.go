@@ -94,7 +94,7 @@ func (fs *FileService) FetchAllBlocks() ([]model.Block, error) {
 	return blocks, nil
 }
 func GetLastBlockNumber() uint64 {
-	data, err := ioutil.ReadFile("../last_block_number.txt")
+	data, err := ioutil.ReadFile("last_block_number.txt")
 	if err != nil {
 		log.Println("No last block number file found, starting from block number 1.")
 		return 0 // Start from block number 0 because increment happens before processing
@@ -108,5 +108,5 @@ func GetLastBlockNumber() uint64 {
 }
 
 func SaveLastBlockNumber(blockNumber uint64) {
-	ioutil.WriteFile("../last_block_number.txt", []byte(fmt.Sprintf("%d", blockNumber)), 0644)
+	ioutil.WriteFile("last_block_number.txt", []byte(fmt.Sprintf("%d", blockNumber)), 0644)
 }
