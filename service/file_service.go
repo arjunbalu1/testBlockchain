@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -35,13 +34,13 @@ func (fs *FileService) WriteBlockToFile(block *model.Block) error {
 	}
 
 	// Determine whether the file already contains a JSON array
-	var blocks []model.Block
+	var blocks []*model.Block
 	if err = json.Unmarshal(data, &blocks); err != nil && len(data) != 0 {
 		return fmt.Errorf("error parsing existing JSON: %v", err)
 	}
 
 	// Append the new block to the array of blocks
-	blocks = append(blocks, *block)
+	blocks = append(blocks, block)
 
 	// Marshal the updated blocks array into JSON
 	updatedData, err := json.Marshal(blocks)
@@ -60,6 +59,8 @@ func (fs *FileService) WriteBlockToFile(block *model.Block) error {
 		return fmt.Errorf("error writing JSON to file: %v", err)
 	}
 
+	fmt.Printf("Block %d written to file\n", block.BlockNumber)
+
 	return nil
 }
 
@@ -69,39 +70,38 @@ func (fs *FileService) FetchBlockByNumber(blockNumber uint64) (*model.Block, err
 	if err != nil {
 		return nil, err
 	}
-	var blocks []model.Block
+	var blocks []*model.Block
 	if err := json.Unmarshal(file, &blocks); err != nil {
 		return nil, err
 	}
 	for _, block := range blocks {
 		if block.BlockNumber == blockNumber {
-			return &block, nil
+			return block, nil
 		}
 	}
 	return nil, fmt.Errorf("block number %d not found", blockNumber)
 }
 
 // FetchAllBlocks retrieves all blocks from the file
-func (fs *FileService) FetchAllBlocks() ([]model.Block, error) {
+func (fs *FileService) FetchAllBlocks() ([]*model.Block, error) {
 	file, err := os.ReadFile(fs.filePath)
 	if err != nil {
 		return nil, err
 	}
-	var blocks []model.Block
+	var blocks []*model.Block
 	if err := json.Unmarshal(file, &blocks); err != nil {
 		return nil, err
 	}
 	return blocks, nil
 }
+
 func GetLastBlockNumber() uint64 {
 	data, err := ioutil.ReadFile("last_block_number.txt")
 	if err != nil {
-		log.Println("No last block number file found, starting from block number 1.")
 		return 0 // Start from block number 0 because increment happens before processing
 	}
 	lastBlockNumber, err := strconv.ParseUint(strings.TrimSpace(string(data)), 10, 64)
 	if err != nil {
-		log.Println("Error parsing last block number, starting from 1.")
 		return 0
 	}
 	return lastBlockNumber
@@ -109,4 +109,5 @@ func GetLastBlockNumber() uint64 {
 
 func SaveLastBlockNumber(blockNumber uint64) {
 	ioutil.WriteFile("last_block_number.txt", []byte(fmt.Sprintf("%d", blockNumber)), 0644)
+	fmt.Printf("Last block number %d saved\n", blockNumber)
 }

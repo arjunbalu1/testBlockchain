@@ -24,13 +24,7 @@ func (api *APIService) PostTransactions(c *gin.Context) {
 		return
 	}
 
-	lastBlockNumber := GetLastBlockNumber()
-	lastBlockNumber++
-	SaveLastBlockNumber(lastBlockNumber)
-
-	go func() {
-		api.BlockService.ProcessTransactions(txns, lastBlockNumber)
-	}()
+	go api.BlockService.ProcessTransactions(txns)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Transactions processed successfully"})
 }

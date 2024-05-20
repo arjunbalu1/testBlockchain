@@ -37,18 +37,17 @@ func (ldb *LevelDB) InitializeDB() {
 	for i := 1; i <= 1000; i++ {
 		key := fmt.Sprintf("SIM%d", i)
 		if data, err := ldb.Get(key); err != nil || data == nil {
-			fmt.Printf("Initializing key: %s\n", key)
 			initialVal := map[string]interface{}{
 				"val": i,   // Setting the value to the index number
 				"ver": 1.0, // Starting version at 1.0
 			}
 			valBytes, err := json.Marshal(initialVal)
 			if err != nil {
-				fmt.Printf("Error marshaling initial value for %s: %v\n", key, err)
+				log.Printf("Error marshaling initial value for %s: %v\n", key, err)
 				continue
 			}
 			if err := ldb.Put(key, valBytes); err != nil {
-				fmt.Printf("Error setting initial value for %s: %v\n", key, err)
+				log.Printf("Error setting initial value for %s: %v\n", key, err)
 			}
 		}
 	}

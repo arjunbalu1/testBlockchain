@@ -1,6 +1,9 @@
 package model
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 type BlockStatus string
 
@@ -17,18 +20,13 @@ type Transaction struct {
 	Hash  string  `json:"hash"`
 }
 
-type BlockInterface interface {
-	PushValidTxns(txns []Transaction)
-	UpdateStatusToCommitted()
-}
-
 type Block struct {
 	BlockNumber  uint64
 	Txns         []Transaction
 	Timestamp    int64
 	BlockStatus  BlockStatus
 	PreviousHash string
-	mu           *sync.Mutex
+	mu           sync.Mutex
 }
 
 func (b *Block) PushValidTxns(txns []Transaction) {
@@ -45,8 +43,13 @@ func (b *Block) UpdateStatusToCommitted() {
 	b.mu.Unlock()
 }
 
-func NewBlock() *Block {
+func NewBlock(blockNumber uint64, previousHash string) *Block {
 	return &Block{
-		mu: new(sync.Mutex),
+		BlockNumber:  blockNumber,
+		Txns:         []Transaction{},
+		Timestamp:    time.Now().Unix(),
+		BlockStatus:  Pending,
+		PreviousHash: previousHash,
+		mu:           sync.Mutex{},
 	}
 }
