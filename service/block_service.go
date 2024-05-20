@@ -6,6 +6,7 @@ import (
 	"blockchain/utils"
 	"encoding/json"
 	"fmt"
+	"os"
 	"sync"
 	"time"
 )
@@ -100,7 +101,9 @@ func (bs *BlockService) commitBlockPeriodically() {
 			bs.currentBlock = model.NewBlock(bs.currentBlock.BlockNumber+1, bs.lastBlockHash)
 		}
 		bs.mu.Unlock()
-		bs.resetTimer()
+		time.Sleep(1 * time.Second)
+		fmt.Println("Exiting due to inactivity...")
+		os.Exit(0)
 	}
 }
 
