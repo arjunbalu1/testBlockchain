@@ -21,7 +21,7 @@ The blockchain now has an automatic block commit feature. If no new transactions
 2. **Inactivity Timer**: An inactivity timer is reset each time a new transaction is processed.
 3. **Block Commit**: If no new transactions are received within 15 seconds, the current block is committed, and the application exits.
 
-### Example
+### Usage Example
 
 Here is an example of how to send transactions to the blockchain via the REST API using `curl`:
 
