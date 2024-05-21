@@ -9,7 +9,7 @@ This project is a simple implementation of a blockchain, designed to demonstrate
 - Transaction handling with LevelDB for data persistence.
 - Block validation and generation.
 - Automatic block commit and application exit after 15 seconds of inactivity.
-- Calculate sha256 hash of blocks and all txns concurrently.
+- Calculate SHA-256 hash of blocks and all txns concurrently.
 
 ## New Feature: Automatic Block Commit on Inactivity
 
