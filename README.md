@@ -47,3 +47,6 @@ To send transactions to the blockchain using Postman, follow these steps:
 ```
 
 - Click the "Send" button to submit the request.
+
+To check database 
+- Run tools/checkdb.go
