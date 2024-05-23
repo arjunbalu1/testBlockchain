@@ -50,5 +50,5 @@ To send transactions to the blockchain using Postman, follow these steps:
 - Click the "Send" button to submit the request.
 
 To check LevelDB database 
-- Run tools/checkdb.go
-- all blocks including invalid txs is stored in the blocks.json file
+- Run tools/checkdb.go after exiting the program.
+- All blocks including invalid txs are stored in the blocks.json file.
